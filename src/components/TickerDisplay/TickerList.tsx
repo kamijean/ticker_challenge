@@ -1,6 +1,7 @@
 import React from "react";
 import useApi from "../../hooks/useApi";
 import TickerRow, { BinanceTicker } from "./TickerRow";
+import Card from "../common/Card";
 
 const FETCH_TICKERS_URL = "https://api.binance.us/api/v3/ticker/24hr";
 
@@ -20,13 +21,13 @@ const TickerList = () => {
   }
 
   return (
-    <div>
+    <Card>
       <h3>Product List</h3>
       {tickers &&
         tickers.map((ticker) => (
           <TickerRow key={ticker.symbol} ticker={ticker} />
         ))}
-    </div>
+    </Card>
   );
 };
 

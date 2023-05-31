@@ -7,7 +7,7 @@ export type PortfolioProduct = {
 
 export type PortfolioProductPayload = {
   productId: string;
-  baseAmount: string;
+  quoteAmount: string;
 };
 
 type PortfolioProductAmountState = Record<string, PortfolioProduct>;
@@ -22,28 +22,28 @@ const portfolioProductSlice = createSlice({
       state,
       action: PayloadAction<PortfolioProductPayload>
     ) => {
-      const { productId, baseAmount } = action.payload;
+      const { productId, quoteAmount } = action.payload;
       const existingProduct = state[productId];
 
       if (existingProduct) {
-        const baseTotalAmount = Number(baseAmount) + Number(existingProduct.baseAmount);
-        const quoteTotalAmount = (Number(existingProduct.quoteAmount) || 0) + 1;
+        const quoteTotalAmount = Number(quoteAmount) + Number(existingProduct.quoteAmount);
+        const baseTotalAmount = (Number(existingProduct.baseAmount) || 0) + 1;
 
         state[productId] = { baseAmount: `${baseTotalAmount}`, quoteAmount: `${quoteTotalAmount}` };
       } else {
-        state[productId] = { baseAmount, quoteAmount: '1' };
+        state[productId] = { baseAmount: '1', quoteAmount };
       }
     },
     updateProductAmountSell: (
       state,
       action: PayloadAction<PortfolioProductPayload>
     ) => {
-      const { productId, baseAmount } = action.payload;
+      const { productId, quoteAmount } = action.payload;
       const existingProduct = state[productId];
 
       if (existingProduct) {
-        const baseTotalAmount = Math.max(Number(existingProduct.baseAmount) - Number(baseAmount), 0);
-        const quoteTotalAmount = Math.max(Number(existingProduct.quoteAmount) - 1, 0);
+        const quoteTotalAmount = Math.max(Number(existingProduct.quoteAmount) - Number(quoteAmount), 0);
+        const baseTotalAmount = Math.max(Number(existingProduct.baseAmount) - 1, 0);
 
         state[productId] = { baseAmount: `${baseTotalAmount}`, quoteAmount: `${quoteTotalAmount}` };
       }

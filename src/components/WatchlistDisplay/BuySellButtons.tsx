@@ -14,20 +14,20 @@ const ButtonWrapper = styled.div`
 `;
 
 type BuySellButtonsProps = {
-  baseAmount: string;
+  quoteAmount: string;
   productId: string;
 };
 
-const BuySellButtons = ({ baseAmount, productId }: BuySellButtonsProps) => {
+const BuySellButtons = ({ quoteAmount, productId }: BuySellButtonsProps) => {
   const dispatch = useDispatch();
 
   const handleUpdateProductAmountBuy = useCallback(() => {
-    dispatch(updateProductAmountBuy({ productId, baseAmount }));
-  }, [baseAmount, dispatch, productId]);
+    dispatch(updateProductAmountBuy({ productId, quoteAmount }));
+  }, [quoteAmount, dispatch, productId]);
 
   const handleUpdateProductAmountSell = useCallback(() => {
-    dispatch(updateProductAmountSell({ productId, baseAmount }));
-  }, [baseAmount, dispatch, productId]);
+    dispatch(updateProductAmountSell({ productId, quoteAmount }));
+  }, [quoteAmount, dispatch, productId]);
 
   return (
     <ButtonWrapper>

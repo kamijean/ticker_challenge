@@ -1,5 +1,4 @@
 import React from "react";
-import "./App.css";
 import TickerDisplay from "./components/TickerDisplay/TickerDisplay";
 import PortfolioDisplay from "./components/PortfolioDisplay/PortfolioDisplay";
 import { Provider } from "react-redux";

@@ -1,11 +1,12 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import useWebSocket from "../../hooks/useWebSocket";
-import TickerWatchlistRow, { TickerStreamPayload } from "./TickerWatchlistRow";
+import WatchlistRow, { TickerStreamPayload } from "./WatchlistRow";
+import Card from "../common/Card";
 
 const STREAM_URL = "wss://stream.binance.us:9443/ws/!ticker@arr";
 
-const TickerWatchlist = () => {
+const WatchlistDisplay = () => {
   const watchlistList = useSelector(
     (state: { watchlist: Record<string, string> }) => state.watchlist
   );
@@ -27,21 +28,17 @@ const TickerWatchlist = () => {
   if (!watchlistList) return null;
 
   return (
-    <div>
+    <Card>
       <h3>Watchlist</h3>
       {watchlistListKeys.length > 0 ? (
         watchlistListKeys.map((productId) => (
-          <TickerWatchlistRow
-            key={productId}
-            productId={productId}
-            data={data}
-          />
+          <WatchlistRow key={productId} productId={productId} data={data} />
         ))
       ) : (
         <p>No tickers selected</p>
       )}
-    </div>
+    </Card>
   );
 };
 
-export default TickerWatchlist;
+export default WatchlistDisplay;

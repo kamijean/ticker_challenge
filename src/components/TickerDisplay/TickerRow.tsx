@@ -46,7 +46,7 @@ const TickerRow = ({ ticker }: TickerRowProps) => {
     dispatch(
       updateWatchlist({
         productId: symbol,
-        baseAmount: lastPrice,
+        quoteAmount: lastPrice,
       })
     );
   }, [dispatch, ticker]);

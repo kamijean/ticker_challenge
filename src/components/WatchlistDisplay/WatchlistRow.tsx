@@ -1,6 +1,5 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { PortfolioProduct } from "../../reducers/portfolioReducer";
 import { updateWatchlist } from "../../reducers/watchlistReducer";
 import BuySellButtons from "./BuySellButtons";
 import styled from "styled-components";
@@ -26,7 +25,7 @@ export type TickerStreamPayload = {
   n: number; // Total number of trades
 };
 
-type TickerWatchlistRowProps = {
+type WatchlistRowProps = {
   productId: string;
   data: TickerStreamPayload[];
 };
@@ -48,7 +47,7 @@ const WatchlistDetailsWrapper = styled.div`
   margin-right: 20px;
 `;
 
-const TickerWatchlistRow = ({ productId, data }: TickerWatchlistRowProps) => {
+const WatchlistRow = ({ productId, data }: WatchlistRowProps) => {
   const dispatch = useDispatch();
 
   const watchlistList = useSelector(
@@ -59,22 +58,22 @@ const TickerWatchlistRow = ({ productId, data }: TickerWatchlistRowProps) => {
     return data.find((item) => item.s === productId);
   }, [data, productId]);
 
-  const baseAmount = tickerRow?.c ?? watchlistList[productId];
+  const quoteAmount = tickerRow?.c ?? watchlistList[productId];
 
   const handleUpdateWatchlist = React.useCallback(() => {
-    dispatch(updateWatchlist({ productId, baseAmount }));
-  }, [dispatch, productId, baseAmount]);
+    dispatch(updateWatchlist({ productId, quoteAmount }));
+  }, [dispatch, productId, quoteAmount]);
 
   return (
     <WatchlistWrapper>
       <FavoriteOutlinedIcon />
       <WatchlistDetailsWrapper onClick={handleUpdateWatchlist}>
         <span>{productId}</span>
-        <span>{baseAmount}</span>
+        <span>{quoteAmount}</span>
       </WatchlistDetailsWrapper>
-      <BuySellButtons baseAmount={baseAmount} productId={productId} />
+      <BuySellButtons quoteAmount={quoteAmount} productId={productId} />
     </WatchlistWrapper>
   );
 };
 
-export default TickerWatchlistRow;
+export default WatchlistRow;

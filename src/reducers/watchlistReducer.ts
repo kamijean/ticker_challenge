@@ -6,7 +6,7 @@ type WatchlistState = {
 
 type WatchlistPayload = {
     productId: string;
-    baseAmount: string;
+    quoteAmount: string;
 }
 
 const initialState: WatchlistState = {};
@@ -16,11 +16,11 @@ const watchlistSlice = createSlice({
   initialState,
   reducers: {
     updateWatchlist: (state, action: PayloadAction<WatchlistPayload>) => {
-      const { productId, baseAmount } = action.payload;
+      const { productId, quoteAmount } = action.payload;
       if (productId in state) {
         delete state[productId];
       } else {
-        state[productId] = baseAmount;
+        state[productId] = quoteAmount;
       }
     },
     removeProduct: (state, action: PayloadAction<string>) => {
