@@ -1,26 +1,30 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-export type PortfolioProduct = {
+export type Portfolio = {
   baseAmount: string;
   quoteAmount: string;
 };
 
-export type PortfolioProductPayload = {
+export type PortfolioPayload = {
   productId: string;
   quoteAmount: string;
 };
 
-type PortfolioProductAmountState = Record<string, PortfolioProduct>;
+export type RemoveProductPayload = {
+  productId: string;
+};
 
-const initialState: PortfolioProductAmountState = {};
+type PortfolioAmountState = Record<string, Portfolio>;
 
-const portfolioProductSlice = createSlice({
-  name: 'portfolioProductAmount',
+const initialState: PortfolioAmountState = {};
+
+const portfolioSlice = createSlice({
+  name: 'portfolioAmount',
   initialState,
   reducers: {
     updateProductAmountBuy: (
       state,
-      action: PayloadAction<PortfolioProductPayload>
+      action: PayloadAction<PortfolioPayload>
     ) => {
       const { productId, quoteAmount } = action.payload;
       const existingProduct = state[productId];
@@ -36,7 +40,7 @@ const portfolioProductSlice = createSlice({
     },
     updateProductAmountSell: (
       state,
-      action: PayloadAction<PortfolioProductPayload>
+      action: PayloadAction<PortfolioPayload>
     ) => {
       const { productId, quoteAmount } = action.payload;
       const existingProduct = state[productId];
@@ -48,12 +52,12 @@ const portfolioProductSlice = createSlice({
         state[productId] = { baseAmount: `${baseTotalAmount}`, quoteAmount: `${quoteTotalAmount}` };
       }
     },
-    removeProductAmount: (state, action: PayloadAction<PortfolioProductPayload>) => {
+    removeProductAmount: (state, action: PayloadAction<RemoveProductPayload>) => {
       const { productId } = action.payload;
       delete state[productId];
     },
   },
 });
 
-export const { updateProductAmountBuy, updateProductAmountSell, removeProductAmount } = portfolioProductSlice.actions;
-export default portfolioProductSlice.reducer;
+export const { updateProductAmountBuy, updateProductAmountSell, removeProductAmount } = portfolioSlice.actions;
+export default portfolioSlice.reducer;

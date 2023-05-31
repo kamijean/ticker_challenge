@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-type WatchlistState = {
+export type WatchlistState = {
   [productId: string]: string;
 }
 
-type WatchlistPayload = {
+export type WatchlistPayload = {
     productId: string;
     quoteAmount: string;
 }

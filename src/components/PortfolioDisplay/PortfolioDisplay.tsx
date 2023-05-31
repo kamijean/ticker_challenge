@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { PortfolioProduct } from "../../reducers/portfolioReducer";
+import { Portfolio } from "../../reducers/portfolioReducer";
 import styled from "styled-components";
 import Table, { TableDefinitionType } from "../common/Table";
 import Card from "../common/Card";
@@ -32,8 +32,8 @@ const columns: TableDefinitionType<PorfolioValues, keyof PorfolioValues>[] = [
 ];
 
 const ProductDisplay = () => {
-  const productsList: Record<string, PortfolioProduct> = useSelector(
-    (state: Record<string, Record<string, PortfolioProduct>>) => state.portfolio
+  const productsList: Record<string, Portfolio> = useSelector(
+    (state: Record<string, Record<string, Portfolio>>) => state.portfolio
   );
 
   const productListArray: PorfolioValues[] = React.useMemo(() => {
