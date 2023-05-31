@@ -1,11 +1,27 @@
-import React from "react";
-import { updateWatchlist } from "../../reducers/watchlistReducer";
+import React, { useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { BinanceTicker } from "./TickerList";
+import { updateWatchlist } from "../../reducers/watchlistReducer";
 import styled from "styled-components";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
-import { PortfolioProduct } from "../../reducers/portfolioReducer";
+
+export type BinanceTicker = {
+  symbol: string;
+  priceChange: string; // Absolute price change
+  priceChangePercent: string; // Relative price change in percent
+  weightedAvgPrice: string; // QuoteVolume / Volume
+  openPrice: string;
+  highPrice: string;
+  lowPrice: string;
+  lastPrice: string;
+  volume: string;
+  quoteVolume: string; // Sum of (price * volume) for all trades
+  openTime: number; // Open time for ticker window
+  closeTime: number; // Current Time of the Request
+  firstId: number; // Trade IDs
+  lastId: number;
+  count: number;
+};
 
 type TickerRowProps = {
   ticker: BinanceTicker;
@@ -20,28 +36,28 @@ const TickerWrapper = styled.div`
 `;
 
 const TickerRow = ({ ticker }: TickerRowProps) => {
-  const watchlistList: Record<string, PortfolioProduct> = useSelector(
-    (state: Record<string, Record<string, PortfolioProduct>>) => state.watchlist
+  const watchlistList = useSelector(
+    (state: { watchlist: Record<string, string> }) => state.watchlist
   );
   const dispatch = useDispatch();
 
-  const handleUpdateWatchlist = React.useCallback(() => {
+  const handleUpdateWatchlist = useCallback(() => {
+    const { symbol, lastPrice } = ticker;
     dispatch(
       updateWatchlist({
-        productId: ticker.symbol,
-        baseAmount: ticker.lastPrice,
-        quoteAmount: ticker.quoteVolume,
+        productId: symbol,
+        baseAmount: lastPrice,
       })
     );
-  }, [dispatch, ticker.lastPrice, ticker.quoteVolume, ticker.symbol]);
+  }, [dispatch, ticker]);
 
-  const isSelected = React.useMemo(
+  const isSelected = useMemo(
     () => watchlistList.hasOwnProperty(ticker.symbol),
-    [ticker.symbol, watchlistList]
+    [watchlistList, ticker.symbol]
   );
 
   return (
-    <TickerWrapper key={ticker.symbol} onClick={handleUpdateWatchlist}>
+    <TickerWrapper onClick={handleUpdateWatchlist}>
       {isSelected ? <FavoriteOutlinedIcon /> : <FavoriteBorderOutlinedIcon />}
       <span>{ticker.symbol}</span>
     </TickerWrapper>

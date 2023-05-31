@@ -2,10 +2,29 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { PortfolioProduct } from "../../reducers/portfolioReducer";
 import { updateWatchlist } from "../../reducers/watchlistReducer";
-import { TickerStreamPayload } from "./TickerWatchlist";
 import BuySellButtons from "./BuySellButtons";
 import styled from "styled-components";
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
+
+export type TickerStreamPayload = {
+  e: string; // Event type
+  E: Date; // Event time
+  s: string; // Symbol
+  p: string; // Price change
+  P: string; // Price change percent
+  o: string; // Open price
+  h: string; // High price
+  l: string; // Low price
+  c: string; // Last price
+  w: string; // Weighted average price
+  v: string; // Total traded base asset volume
+  q: string; // Total traded quote asset volume
+  O: number; // Statistics open time
+  C: Date; // Statistics close time
+  F: number; // First trade ID
+  L: number; // Last trade Id
+  n: number; // Total number of trades
+};
 
 type TickerWatchlistRowProps = {
   productId: string;
@@ -32,23 +51,19 @@ const WatchlistDetailsWrapper = styled.div`
 const TickerWatchlistRow = ({ productId, data }: TickerWatchlistRowProps) => {
   const dispatch = useDispatch();
 
-  const watchlistList: Record<string, PortfolioProduct> = useSelector(
-    (state: Record<string, Record<string, PortfolioProduct>>) => state.watchlist
+  const watchlistList = useSelector(
+    (state: { watchlist: Record<string, string> }) => state.watchlist
   );
 
-  const [baseAmount, quoteAmount] = React.useMemo(() => {
-    const tickerRow: TickerStreamPayload | undefined = data.find(
-      (item) => item.s === productId
-    );
-    return [
-      tickerRow?.c ?? watchlistList[productId].baseAmount,
-      tickerRow?.q ?? watchlistList[productId].quoteAmount,
-    ];
-  }, [data, watchlistList, productId]);
+  const tickerRow = React.useMemo(() => {
+    return data.find((item) => item.s === productId);
+  }, [data, productId]);
+
+  const baseAmount = tickerRow?.c ?? watchlistList[productId];
 
   const handleUpdateWatchlist = React.useCallback(() => {
-    dispatch(updateWatchlist({ productId, baseAmount, quoteAmount }));
-  }, [baseAmount, dispatch, quoteAmount, productId]);
+    dispatch(updateWatchlist({ productId, baseAmount }));
+  }, [dispatch, productId, baseAmount]);
 
   return (
     <WatchlistWrapper>
@@ -57,11 +72,7 @@ const TickerWatchlistRow = ({ productId, data }: TickerWatchlistRowProps) => {
         <span>{productId}</span>
         <span>{baseAmount}</span>
       </WatchlistDetailsWrapper>
-      <BuySellButtons
-        baseAmount={baseAmount}
-        quoteAmount={quoteAmount}
-        productId={productId}
-      />
+      <BuySellButtons baseAmount={baseAmount} productId={productId} />
     </WatchlistWrapper>
   );
 };

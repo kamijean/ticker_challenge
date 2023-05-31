@@ -1,26 +1,6 @@
 import React from "react";
 import useApi from "../../hooks/useApi";
-import TickerRow from "./TickerRow";
-
-export type BinanceTicker = {
-  symbol: string;
-  priceChange: string; // Absolute price change
-  priceChangePercent: string; // Relative price change in percent
-  weightedAvgPrice: string; // QuoteVolume / Volume
-  openPrice: string;
-  highPrice: string;
-  lowPrice: string;
-  lastPrice: string;
-  volume: string;
-  quoteVolume: string; // Sum of (price * volume) for all trades
-  openTime: number; // Open time for ticker window
-  closeTime: number; // Current Time of the Request
-  firstId: number; // Trade IDs
-  lastId: number;
-  count: number;
-};
-
-type BinanceTickers = BinanceTicker[];
+import TickerRow, { BinanceTicker } from "./TickerRow";
 
 const FETCH_TICKERS_URL = "https://api.binance.us/api/v3/ticker/24hr";
 
@@ -29,7 +9,7 @@ const TickerList = () => {
     data: tickers,
     isLoading,
     error,
-  } = useApi<BinanceTickers>(FETCH_TICKERS_URL);
+  } = useApi<BinanceTicker[]>(FETCH_TICKERS_URL);
 
   if (isLoading) {
     return <div>Loading...</div>;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import {
   updateProductAmountBuy,
@@ -15,24 +15,19 @@ const ButtonWrapper = styled.div`
 
 type BuySellButtonsProps = {
   baseAmount: string;
-  quoteAmount: string;
   productId: string;
 };
 
-const BuySellButtons = ({
-  baseAmount,
-  quoteAmount,
-  productId,
-}: BuySellButtonsProps) => {
+const BuySellButtons = ({ baseAmount, productId }: BuySellButtonsProps) => {
   const dispatch = useDispatch();
 
-  const handleUpdateProductAmountBuy = React.useCallback(() => {
-    dispatch(updateProductAmountBuy({ productId, baseAmount, quoteAmount }));
-  }, [baseAmount, dispatch, productId, quoteAmount]);
+  const handleUpdateProductAmountBuy = useCallback(() => {
+    dispatch(updateProductAmountBuy({ productId, baseAmount }));
+  }, [baseAmount, dispatch, productId]);
 
-  const handleUpdateProductAmountSell = React.useCallback(() => {
-    dispatch(updateProductAmountSell({ productId, baseAmount, quoteAmount }));
-  }, [baseAmount, dispatch, productId, quoteAmount]);
+  const handleUpdateProductAmountSell = useCallback(() => {
+    dispatch(updateProductAmountSell({ productId, baseAmount }));
+  }, [baseAmount, dispatch, productId]);
 
   return (
     <ButtonWrapper>

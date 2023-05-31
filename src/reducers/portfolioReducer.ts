@@ -1,52 +1,59 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export type PortfolioProduct = {
   baseAmount: string;
   quoteAmount: string;
-}
+};
 
-export type PortfolioProductAmountPayload = {
-  payload: {
-    productId: string;
-  } & PortfolioProduct
-}
+export type PortfolioProductPayload = {
+  productId: string;
+  baseAmount: string;
+};
 
-const initialState = {};
+type PortfolioProductAmountState = Record<string, PortfolioProduct>;
 
-const portfolioProductAmountSlice = createSlice({
+const initialState: PortfolioProductAmountState = {};
+
+const portfolioProductSlice = createSlice({
   name: 'portfolioProductAmount',
-  initialState: initialState,
+  initialState,
   reducers: {
-    updateProductAmountBuy: (state: Record<string, PortfolioProduct>, action: PortfolioProductAmountPayload) => {
-        const { productId, baseAmount, quoteAmount } = action.payload;
-        if (state.hasOwnProperty(productId)) {
-            const baseTotalAmount = Number(baseAmount) + Number(state[productId].baseAmount);
-            const quoteTotalAmount = Number(quoteAmount) + Number(state[productId].quoteAmount);
-            state[productId] = { baseAmount: `${baseTotalAmount}`, quoteAmount: `${quoteTotalAmount}` };
-        } else {
-          state[productId] = { baseAmount, quoteAmount };
-        }
-    },
-    updateProductAmountSell: (state: Record<string, PortfolioProduct>, action: PortfolioProductAmountPayload) => {
-      const { productId, baseAmount, quoteAmount } = action.payload;
-      if (state.hasOwnProperty(productId)) {
-          const baseTotalAmount = Number(state[productId].baseAmount) - Number(baseAmount);
-          const quoteTotalAmount = Number(state[productId].quoteAmount) - Number(quoteAmount);
-          if(baseTotalAmount >= 0 && quoteTotalAmount >=0) {
-            state[productId] = { baseAmount: `${baseTotalAmount}`, quoteAmount: `${quoteTotalAmount}` };
-          }
+    updateProductAmountBuy: (
+      state,
+      action: PayloadAction<PortfolioProductPayload>
+    ) => {
+      const { productId, baseAmount } = action.payload;
+      const existingProduct = state[productId];
+
+      if (existingProduct) {
+        const baseTotalAmount = Number(baseAmount) + Number(existingProduct.baseAmount);
+        const quoteTotalAmount = (Number(existingProduct.quoteAmount) || 0) + 1;
+
+        state[productId] = { baseAmount: `${baseTotalAmount}`, quoteAmount: `${quoteTotalAmount}` };
       } else {
-        state[productId] = { baseAmount, quoteAmount };
+        state[productId] = { baseAmount, quoteAmount: '1' };
       }
-  },
-    removeProductAmount: (state: Record<string, string>, action: PortfolioProductAmountPayload) => {
+    },
+    updateProductAmountSell: (
+      state,
+      action: PayloadAction<PortfolioProductPayload>
+    ) => {
+      const { productId, baseAmount } = action.payload;
+      const existingProduct = state[productId];
+
+      if (existingProduct) {
+        const baseTotalAmount = Math.max(Number(existingProduct.baseAmount) - Number(baseAmount), 0);
+        const quoteTotalAmount = Math.max(Number(existingProduct.quoteAmount) - 1, 0);
+
+        state[productId] = { baseAmount: `${baseTotalAmount}`, quoteAmount: `${quoteTotalAmount}` };
+      }
+    },
+    removeProductAmount: (state, action: PayloadAction<PortfolioProductPayload>) => {
       const { productId } = action.payload;
-      if (state.hasOwnProperty(productId)) {
-        delete state[productId];
-      }
+      delete state[productId];
     },
   },
 });
 
-export const { updateProductAmountBuy, updateProductAmountSell, removeProductAmount } = portfolioProductAmountSlice.actions;
-export default portfolioProductAmountSlice.reducer;
+export const { updateProductAmountBuy, updateProductAmountSell, removeProductAmount } = portfolioProductSlice.actions;
+export default portfolioProductSlice.reducer;

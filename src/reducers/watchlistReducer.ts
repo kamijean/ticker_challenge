@@ -1,24 +1,31 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { PortfolioProduct, PortfolioProductAmountPayload } from './portfolioReducer';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+type WatchlistState = {
+  [productId: string]: string;
+}
 
-const initialState = {};
+type WatchlistPayload = {
+    productId: string;
+    baseAmount: string;
+}
+
+const initialState: WatchlistState = {};
 
 const watchlistSlice = createSlice({
   name: 'watchlist',
-  initialState: initialState,
+  initialState,
   reducers: {
-    updateWatchlist: (state: Record<string, PortfolioProduct>, action: PortfolioProductAmountPayload) => {
-        const { productId, baseAmount, quoteAmount } = action.payload;
-        if (state.hasOwnProperty(productId)) {
-            delete state[productId];
-        } else {
-            state[productId] = { baseAmount, quoteAmount };
-        }
+    updateWatchlist: (state, action: PayloadAction<WatchlistPayload>) => {
+      const { productId, baseAmount } = action.payload;
+      if (productId in state) {
+        delete state[productId];
+      } else {
+        state[productId] = baseAmount;
+      }
     },
-    removeProduct: (state: Record<string, string>, action: PortfolioProductAmountPayload) => {
-      const { productId } = action.payload;
-      if (state.hasOwnProperty(productId)) {
+    removeProduct: (state, action: PayloadAction<string>) => {
+      const productId = action.payload;
+      if (productId in state) {
         delete state[productId];
       }
     },
