@@ -6,10 +6,6 @@ const TableWrapper = styled.table`
   border: 1px solid gray;
 `;
 
-const TableHeaderHead = styled.thead`
-  border-bottom: 1px solid gray;
-`;
-
 const TableHeader = styled.th`
   font-weight: bold;
   padding-bottom: 20px;
@@ -52,13 +48,15 @@ type TableProps<T, K extends keyof T> = {
 const Table = <T, K extends keyof T>({ columns, data }: TableProps<T, K>) => {
   return (
     <TableWrapper>
-      <TableHeaderHead>
-        {columns.map((column) => (
-          <TableHeader key={`headCell-${column.header}`}>
-            {column.header}
-          </TableHeader>
-        ))}
-      </TableHeaderHead>
+      <thead>
+        <TableRow>
+          {columns.map((column) => (
+            <TableHeader key={`headCell-${column.header}`}>
+              {column.header}
+            </TableHeader>
+          ))}
+        </TableRow>
+      </thead>
       <tbody>
         {data.map((row, index) => (
           <TableRow key={`row-${index}`}>

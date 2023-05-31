@@ -27,12 +27,15 @@ type TickerRowProps = {
   ticker: BinanceTicker;
 };
 
-const TickerWrapper = styled.div`
+const TickerRowWrapper = styled.div`
   cursor: pointer;
   padding: 4px;
   display: flex;
   align-items: center;
   gap: 6px;
+  &:hover {
+    filter: brightness(0.5);
+  }
 `;
 
 const TickerRow = ({ ticker }: TickerRowProps) => {
@@ -57,10 +60,10 @@ const TickerRow = ({ ticker }: TickerRowProps) => {
   );
 
   return (
-    <TickerWrapper onClick={handleUpdateWatchlist}>
+    <TickerRowWrapper onClick={handleUpdateWatchlist}>
       {isSelected ? <FavoriteOutlinedIcon /> : <FavoriteBorderOutlinedIcon />}
       <span>{ticker.symbol}</span>
-    </TickerWrapper>
+    </TickerRowWrapper>
   );
 };
 

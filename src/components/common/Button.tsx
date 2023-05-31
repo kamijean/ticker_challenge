@@ -1,10 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import {
-  ButtonColorLookup,
-  buttonColorMap,
-  lightenColor,
-} from "../../helpers/colorHelper";
+import { ButtonColorLookup, buttonColorMap } from "../../helpers/colorHelper";
 
 type ButtonProps = {
   label: string;
@@ -22,11 +18,7 @@ const StyledButton = styled.button<{ buttonColor?: ButtonColorLookup }>`
   cursor: pointer;
 
   &:hover {
-    background-color: ${(props) =>
-      lightenColor({
-        color:
-          props.buttonColor || (buttonColorMap.primary as ButtonColorLookup),
-      })};
+    filter: brightness(0.75);
   }
 `;
 

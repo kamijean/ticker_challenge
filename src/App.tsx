@@ -13,7 +13,7 @@ const AppWrapper = styled.div`
 
 const AppContainer = styled.div`
   display: flex;
-  gap: 100px;
+  gap: 30px;
   width: 1200px;
 `;
 

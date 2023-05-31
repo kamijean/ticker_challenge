@@ -45,6 +45,9 @@ const WatchlistDetailsWrapper = styled.div`
   width: 220px;
   justify-content: space-between;
   margin-right: 20px;
+  &:hover {
+    filter: brightness(0.5);
+  }
 `;
 
 const WatchlistRow = ({ productId, data }: WatchlistRowProps) => {

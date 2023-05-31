@@ -13,11 +13,11 @@ const TickerList = () => {
   } = useApi<BinanceTicker[]>(FETCH_TICKERS_URL);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Card>Loading...</Card>;
   }
 
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return <Card>Error: {error.message}</Card>;
   }
 
   return (
